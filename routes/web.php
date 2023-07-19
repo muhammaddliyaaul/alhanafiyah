@@ -24,3 +24,6 @@ Auth::routes();
 
 Route::resource('home', HomeController::class);
 Route::resource('kategori', KategoriController::class);
+
+Route::get('home/{id}/hapus', [HomeController::class, 'hapus'])->name('home.hapus');
+Route::delete('/hapusAll',[HomeController::class,'hapusAll'])->name('deleteSelected');

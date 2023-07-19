@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Produk;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -25,7 +26,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $home = Produk::latest()->paginate(10);
+        $home = Produk::paginate(10);
         return view('home', compact('home'));
     }
 
@@ -100,6 +101,20 @@ class HomeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        
+    }
+
+    public function hapus($id)
+    {
+        $produk = Produk::find($id);
+        $produk->delete();
+        return redirect('/home');
+    }
+
+    public function hapusAll(Request $request)
+    {
+        $ids = $request->ids;
+        Produk::whereIn('id',$ids)->delete();
+        return response()->json(['success'=>"Data Berhasil di Delete"]);
     }
 }

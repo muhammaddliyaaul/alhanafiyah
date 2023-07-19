@@ -18,6 +18,7 @@
             document.documentElement.classList.remove('dark')
         }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     @vite('resources/css/app.css')
 </head>
 
@@ -127,7 +128,7 @@
     <div class="p-4 sm:ml-64 mt-14">
         @yield('content')
     </div>
-
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.6/flowbite.min.js"></script>
 
     <script>
@@ -172,8 +173,39 @@
 
         });
     </script>
+    <script>
+    $(function(e){
+        $("#checkbox-all-search").click(function(){
+            $(".checkBoxClass").prop('checked',$(this).prop('checked'));
+        });
+
+        $("#deleteAll").click(function(e){
+            e.preventDefault();
+            var allids = [];
+
+            $("input:checkbox[name=ids]:checked").each(function(){
+                allids.push($(this).val());
+            });
+
+            $.ajax({
+                url:"{{route('deleteSelected')}}",
+                type:"DELETE",
+                data:{
+                    _token:$("input[name=_token]").val(),
+                    ids:allids
+                },
+                success:function(response){
+                    $.each(allids,function(key,val){
+                        $("#sid"+val).remove();
+                    })
+                }
+            });
+        });
+    });
+    </script>
 
     @vite('resources/js/app.js')
+
 </body>
 
 </html>
